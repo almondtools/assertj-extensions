@@ -37,6 +37,12 @@ public class Strings extends org.assertj.core.internal.Strings {
 		checkPatternIsNotNull(wildcardstring);
 		assertNotNull(info, actual);
 
+		if (!containsWildcardPattern(actual, wildcardstring)) {
+			throw failures.failure(info, shouldContainPattern(actual, wildcardstring));
+		}
+	}
+
+	public static boolean containsWildcardPattern(CharSequence actual, CharSequence wildcardstring) {
 		StringTokenizer t = new StringTokenizer(wildcardstring.toString(), "?*", true);
 		StringBuilder buffer = new StringBuilder();
 		while (t.hasMoreTokens()) {
@@ -52,31 +58,14 @@ public class Strings extends org.assertj.core.internal.Strings {
 		Pattern pattern = Pattern.compile(buffer.toString(), DOTALL);
 		Matcher matcher = pattern.matcher(actual);
 
-		if (!matcher.find()) {
-			throw failures.failure(info, shouldContainPattern(actual, wildcardstring));
-		}
+		return matcher.find();
 	}
 
 	public void assertNotContainsWildcardPattern(AssertionInfo info, CharSequence actual, CharSequence wildcardstring) {
 		checkPatternIsNotNull(wildcardstring);
 		assertNotNull(info, actual);
 
-		StringTokenizer t = new StringTokenizer(wildcardstring.toString(), "?*", true);
-		StringBuilder buffer = new StringBuilder();
-		while (t.hasMoreTokens()) {
-			String nextToken = t.nextToken();
-			if ("?".equals(nextToken)) {
-				buffer.append(".?");
-			} else if ("*".equals(nextToken)) {
-				buffer.append(".*?");
-			} else {
-				buffer.append(Pattern.quote(nextToken));
-			}
-		}
-		Pattern pattern = Pattern.compile(buffer.toString(), DOTALL);
-		Matcher matcher = pattern.matcher(actual);
-
-		if (matcher.find()) {
+		if (containsWildcardPattern(actual, wildcardstring)) {
 			throw failures.failure(info, shouldNotContainPattern(actual, wildcardstring));
 		}
 	}
