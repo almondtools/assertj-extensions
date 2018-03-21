@@ -46,11 +46,12 @@ public class DefaultEnum {
 				for (Enum<?> enumConstant : enumConstants) {
 					try {
 						Method valueOf = item.getDeclaredMethod("valueOf", String.class);
+						valueOf.setAccessible(true);
 						Object result = valueOf.invoke(null, enumConstant.name());
 						softly.assertThat(result).withFailMessage("valueOf(\"" + enumConstant.name() + "\") != " + enumConstant.getClass().getSimpleName() + "." + enumConstant.name())
 							.isSameAs(enumConstant);
 					} catch (ReflectiveOperationException | SecurityException e) {
-						softly.fail("fails with %s", e);
+						softly.fail("fails with exception", e);
 					}
 				}
 			}
