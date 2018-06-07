@@ -20,7 +20,7 @@ public final class ArrayConditions {
 	}
 
 	public static <E> Condition<E[]> containingExactly(Iterable<Condition<E>> requirements) {
-		List<String> requiredString = StreamSupport.stream(requirements.spliterator(), false).map(Object::toString).collect(toList());
+		List<String> requiredString = StreamSupport.stream(requirements.spliterator(), false).map(req -> req.description().value()).collect(toList());
 		return new Condition<E[]>(actual -> {
 			Iterator<E> actualIterator = asList(actual).iterator();
 			Iterator<Condition<E>> requirementsIterator = requirements.iterator();
