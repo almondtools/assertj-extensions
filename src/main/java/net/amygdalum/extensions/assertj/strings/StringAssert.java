@@ -1,8 +1,8 @@
 package net.amygdalum.extensions.assertj.strings;
 
-import org.assertj.core.api.AbstractCharSequenceAssert;
+import org.assertj.core.api.AbstractStringAssert;
 
-public class StringAssert extends AbstractCharSequenceAssert<StringAssert, String> {
+public class StringAssert extends AbstractStringAssert<StringAssert> {
 
 	Strings strings = Strings.instance();
 

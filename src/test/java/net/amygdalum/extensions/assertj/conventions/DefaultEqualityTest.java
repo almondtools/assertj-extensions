@@ -3,8 +3,8 @@ package net.amygdalum.extensions.assertj.conventions;
 import static net.amygdalum.extensions.assertj.conventions.DefaultEquality.defaultEquality;
 import static org.assertj.core.api.Assertions.assertThatCode;
 
-import org.assertj.core.api.SoftAssertionError;
 import org.junit.jupiter.api.Test;
+import org.opentest4j.MultipleFailuresError;
 
 public class DefaultEqualityTest {
 
@@ -27,7 +27,7 @@ public class DefaultEqualityTest {
 		assertThatCode(() -> defaultEquality()
 			.andEqualTo(new BrokenEqual("field"))
 			.conventions().accept(new BrokenEqual("field")))
-				.isInstanceOf(SoftAssertionError.class)
+				.isInstanceOf(MultipleFailuresError.class)
 				.hasMessageContaining("field should equal field");
 	}
 
@@ -36,7 +36,7 @@ public class DefaultEqualityTest {
 		assertThatCode(() -> defaultEquality()
 			.andEqualTo(new BrokenEqualAsymetric(false))
 			.conventions().accept(new BrokenEqualAsymetric(true)))
-				.isInstanceOf(SoftAssertionError.class)
+				.isInstanceOf(MultipleFailuresError.class)
 				.hasMessageContaining("false should equal true");
 	}
 
@@ -45,7 +45,7 @@ public class DefaultEqualityTest {
 		assertThatCode(() -> defaultEquality()
 			.andNotEqualTo(new BrokenNotEqual("field"))
 			.conventions().accept(new BrokenNotEqual("field")))
-				.isInstanceOf(SoftAssertionError.class)
+				.isInstanceOf(MultipleFailuresError.class)
 				.hasMessageContaining("field should not equal field");
 	}
 
@@ -54,7 +54,7 @@ public class DefaultEqualityTest {
 		assertThatCode(() -> defaultEquality()
 			.andNotEqualTo(new BrokenEqualAsymetric(true))
 			.conventions().accept(new BrokenEqualAsymetric(false)))
-				.isInstanceOf(SoftAssertionError.class)
+				.isInstanceOf(MultipleFailuresError.class)
 				.hasMessageContaining("true should not equal false");
 	}
 
@@ -64,7 +64,7 @@ public class DefaultEqualityTest {
 			.andEqualTo(new DefaultEqualNoToString("field"))
 			.includingToString()
 			.conventions().accept(new DefaultEqualNoToString("field")))
-				.isInstanceOf(SoftAssertionError.class)
+				.isInstanceOf(MultipleFailuresError.class)
 				.hasMessageMatching("[\\s\\S]*toString of \\d+ should be equal to toString of \\d+[\\s\\S]*");
 	}
 
@@ -89,7 +89,7 @@ public class DefaultEqualityTest {
 	public void testMismatchesNull() throws Exception {
 		assertThatCode(() -> defaultEquality()
 			.conventions().accept(null))
-				.isInstanceOf(SoftAssertionError.class)
+				.isInstanceOf(MultipleFailuresError.class)
 				.hasMessageContaining("equality on null is not valid");
 	}
 
@@ -97,7 +97,7 @@ public class DefaultEqualityTest {
 	public void testMismatchesNotSelfEqual() throws Exception {
 		assertThatCode(() -> defaultEquality()
 			.conventions().accept(new NotSelfEqual()))
-				.isInstanceOf(SoftAssertionError.class)
+				.isInstanceOf(MultipleFailuresError.class)
 				.hasMessageContaining("should equal itself");
 	}
 
@@ -105,7 +105,7 @@ public class DefaultEqualityTest {
 	public void testMismatchesSelfEqualButDifferentHashcodes() throws Exception {
 		assertThatCode(() -> defaultEquality()
 			.conventions().accept(new SelfEqualButDifferentHashcodes()))
-				.isInstanceOf(SoftAssertionError.class)
+				.isInstanceOf(MultipleFailuresError.class)
 				.hasMessageContaining("hashcode should be idempotent");
 	}
 
@@ -114,7 +114,7 @@ public class DefaultEqualityTest {
 		assertThatCode(() -> defaultEquality()
 			.andEqualTo(new DefaultEqualButDifferentHashcodes("field", 1))
 			.conventions().accept(new DefaultEqualButDifferentHashcodes("field", 2)))
-				.isInstanceOf(SoftAssertionError.class)
+				.isInstanceOf(MultipleFailuresError.class)
 				.hasMessageContaining("hashcode of field2 should be equal to hashcode of field1");
 	}
 
@@ -122,7 +122,7 @@ public class DefaultEqualityTest {
 	public void testMismatchesNullEqual() throws Exception {
 		assertThatCode(() -> defaultEquality()
 			.conventions().accept(new NullEqual()))
-				.isInstanceOf(SoftAssertionError.class)
+				.isInstanceOf(MultipleFailuresError.class)
 				.hasMessageContaining("should not equal null");
 	}
 
@@ -130,7 +130,7 @@ public class DefaultEqualityTest {
 	public void testMismatchesEqualToOtherClasses() throws Exception {
 		assertThatCode(() -> defaultEquality()
 			.conventions().accept(new EqualToOtherClasses()))
-				.isInstanceOf(SoftAssertionError.class)
+				.isInstanceOf(MultipleFailuresError.class)
 				.hasMessageContaining("should not match an arbitrary object");
 	}
 
