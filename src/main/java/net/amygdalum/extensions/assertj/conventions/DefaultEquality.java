@@ -59,7 +59,7 @@ public class DefaultEquality {
 				return;
 			}
 
-			softly.assertThat(item).as("object %s should equal itself", item).isEqualTo(item);
+			softly.assertThat(item.equals(item)).as("object %s should equal itself", item).isTrue();
 			softly.assertThat(item.hashCode()).as("objects %s hashcode should be idempotent", item).isEqualTo(item.hashCode());
 
 			for (Object element : equals) {
@@ -73,7 +73,7 @@ public class DefaultEquality {
 				}
 			}
 
-			softly.assertThat(item).as("%s is not null and thus should not equal null", item).isNotEqualTo(null);
+			softly.assertThat(item.equals(null)).as("%s is not null and thus should not equal null", item).isFalse();
 			softly.assertThat(item).as("%s should not match an arbitrary object", item).isNotEqualTo(differentObject);
 
 			for (Object element : notEquals) {
